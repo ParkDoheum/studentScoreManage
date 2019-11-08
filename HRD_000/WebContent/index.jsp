@@ -20,6 +20,8 @@
 			<a href="StudentReg">학생등록</a> 
 			<a href="ScoreReg">성적입력</a>
 			<a href="ScoreList">성적조회</a>
+			<a href="ScoreList2">성적조회2</a>
+			<a href="ScoreList3">성적조회3</a>
 			<a href="ClassAnaly">반별통계</a>
 			<a href="index.jsp">홈</a>			
 		</nav>

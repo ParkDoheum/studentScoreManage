@@ -168,7 +168,86 @@ public class Dao {
 		}
 		return vo;
 	}
+	
+	
+	public static List<ScoreVo> getScore() {
+		List<ScoreVo> list = new ArrayList();
+		
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String sql = "SELECT *\r\n" + 
+				"FROM tbl_score_201905\r\n" + 
+				"ORDER BY syear, sclass, sno";
+		
+		try {
+			con = getCon();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				ScoreVo vo = new ScoreVo();
+				vo.setSyear(rs.getString("syear"));
+				vo.setSclass(rs.getString("sclass"));
+				vo.setSno(rs.getString("sno"));
+				vo.setKor(rs.getInt("kor"));
+				vo.setEng(rs.getInt("eng"));
+				vo.setMath(rs.getInt("math"));	
+				list.add(vo);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, ps, con);
+		}
+		
+		return list;
+	}
+	
+	public static List<StudentVo> getStudent() {
+		List<StudentVo> list = new ArrayList();
+		
+		
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String sql = "SELECT *\r\n" + 
+				"FROM tbl_student_201905\r\n" + 
+				"ORDER BY syear, sclass, sno";
+		
+		try {
+			con = getCon();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				StudentVo vo = new StudentVo();
+				vo.setSyear(rs.getString("syear"));
+				vo.setSclass(rs.getString("sclass"));
+				vo.setSno(rs.getString("sno"));
+				vo.setSname(rs.getString("sname"));
+				vo.setGender(rs.getString("gender"));
+				list.add(vo);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, ps, con);
+		}
+		
+		return list;
+	}
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
