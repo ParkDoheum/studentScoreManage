@@ -89,7 +89,7 @@ public class Dao {
 		
 		String sql = "  SELECT (A.syear || '-' || A.sclass || '-' || A.sno) as pk\r\n" + 
 				", A.sname\r\n" + 
-				", decode(A.gender, 'F', '남', 'M', '여') as gender\r\n" + 
+				", decode(A.gender, 'F', '여', 'M', '남') as gender\r\n" + 
 				", B.kor, B.eng, B.math\r\n" + 
 				", (B.kor + B.eng + B.math) as totalSum\r\n" + 
 				", ROUND(((B.kor + B.eng + B.math) / 3), 2) as totalAvg\r\n" + 
@@ -234,6 +234,67 @@ public class Dao {
 		} finally {
 			close(rs, ps, con);
 		}
+		
+		return list;
+	}
+	
+	public static List<StudentScoreVo> getStudentScoreList() {
+		List<StudentScoreVo> list = new ArrayList();
+		
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String sql = "SELECT\r\n" + 
+				"A.syear, A.sclass, A.sno, A.sname, A.gender\r\n" + 
+				", B.kor, B.eng, B.math\r\n" + 
+				", (B.kor + B.eng + B.math) as totalSum\r\n" + 
+				"FROM tbl_student_201905 A\r\n" + 
+				"INNER JOIN tbl_score_201905 B\r\n" + 
+				"ON A.syear = B.syear\r\n" + 
+				"AND A.sclass = B.sclass\r\n" + 
+				"AND A.sno = B.sno";
+		
+		try {
+			con = getCon();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				StudentScoreVo vo = new StudentScoreVo();
+				vo.setSyear(rs.getString("syear"));
+				vo.setSclass(rs.getString("sclass"));
+				vo.setSno(rs.getString("sno"));
+				vo.setSname(rs.getString("sname"));
+				vo.setGender(rs.getString("gender"));
+				vo.setKor(rs.getInt("kor"));
+				vo.setEng(rs.getInt("eng"));
+				vo.setMath(rs.getInt("math"));
+				vo.setTotalSum(rs.getInt("totalSum"));
+				list.add(vo);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, ps, con);
+		}
+		
+		return list;
+	}
+	
+	//반별통계
+	public static List<TeacherScore> getTeacherScore() {
+		List<TeacherScore> list = new ArrayList();
+		
+		String sql = " SELECT  A.syear, A.sclass, min(tname) as tname\r\n" + 
+				"    , sum(kor) as sumKor, sum(eng) as sumEng, sum(math) as sumMath\r\n" + 
+				"    , avg(kor) as avgKor, avg(eng) as avgEng, avg(math) as avgMath\r\n" + 
+				"    FROM tbl_dept_201905 A\r\n" + 
+				"    INNER JOIN tbl_score_201905 B\r\n" + 
+				"    ON A.syear = B.syear\r\n" + 
+				"    AND A.sclass = B.sclass\r\n" + 
+				"    GROUP BY A.syear, A.sclass";
+		
+		
 		
 		return list;
 	}

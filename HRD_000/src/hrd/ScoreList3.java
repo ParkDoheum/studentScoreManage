@@ -15,8 +15,7 @@ public class ScoreList3 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
            
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
+		request.setAttribute("list", Dao.getStudentScoreList());
 		request.setAttribute("view", "ScoreList3.jsp");
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 	}

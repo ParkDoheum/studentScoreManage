@@ -7,7 +7,7 @@
 	List<StudentVo> student = (List<StudentVo>) request.getAttribute("student");
 	
 %>    
-<h1>학생성적조회</h1>
+<h1>학생성적조회2</h1>
 <table>
 	<tr>
 		<th>학년-반-번호</th>

@@ -3,11 +3,9 @@
 <%@ page import="java.util.*" %>
 <%@ page import="hrd.*" %>    
 <%
-	List<ScoreVo> score = (List<ScoreVo>) request.getAttribute("score");
-	Lqist<StudentVo> student = (List<StudentVo>) request.getAttribute("student");
-	
+	List<StudentScoreVo> list = (List<StudentScoreVo>) request.getAttribute("list");
 %>    
-<h1>학생성적조회</h1>
+<h1>학생성적조회3</h1>
 <table>
 	<tr>
 		<th>학년-반-번호</th>
@@ -25,31 +23,38 @@
 		int sumEng = 0;
 		int sumMath = 0;			
 	%>
-	<% if(score != null) { %>
+	<% if(list != null) { %>
 		
-		<% for(int i=0; i<score.size(); i++) { %>	
+		<% for(StudentScoreVo vo : list) { %>	
 		<%
-			ScoreVo scVo = score.get(i);
-			StudentVo stVo = student.get(i);
-		
 			String pk = String.format("%s-%s-%s", 
-					scVo.getSyear(), scVo.getSclass(), scVo.getSno());
+					vo.getSyear(), vo.getSclass(), vo.getSno());
 			
-			int kor = scVo.getKor();
-			int eng = scVo.getEng();
-			int math = scVo.getMath();
-			int sum = kor + eng + math;
+			int kor = vo.getKor();
+			int eng = vo.getEng();
+			int math = vo.getMath();
+			int sum = vo.getTotalSum();
 			double avg = (double)sum / 3;
 			
 			sumKor += kor;
 			sumEng += eng;
 			sumMath += math;
 			
+			String gender = vo.getGender();
+			
+			if(gender.equalsIgnoreCase("m")) {
+				gender = "남";
+			} else if(gender.equalsIgnoreCase("f")) {
+				gender = "여";
+			} else {
+				gender = "";
+			}
+			
 		%>	
 			<tr>
 				<td><%=pk %></td>
-				<td><%=stVo.getSname() %></td>
-				<td><%=stVo.getGender().equals("M") ? "남" : "여"%></td>
+				<td><%=vo.getSname() %></td>
+				<td><%=gender%></td>
 				<td><%=kor%></td>
 				<td><%=eng%></td>
 				
@@ -71,10 +76,10 @@
 	<tr>
 		<td></td><td></td>
 		<td>학년평균</td>
-		<td><%=String.format("%.1f", (double)sumKor / score.size()) %></td>
-		<td><%=String.format("%.1f", (double)sumEng / score.size()) %></td>
+		<td><%=String.format("%.1f", (double)sumKor / list.size()) %></td>
+		<td><%=String.format("%.1f", (double)sumEng / list.size()) %></td>
 				
-		<td><%=String.format("%.1f", (double)sumMath / score.size()) %></td>
+		<td><%=String.format("%.1f", (double)sumMath / list.size()) %></td>
 		<td></td><td></td>
 	<tr>
 	
